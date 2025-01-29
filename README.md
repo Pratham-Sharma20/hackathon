@@ -6,7 +6,7 @@
 
 An intelligent resume analysis platform that combines AI-powered insights with comprehensive career coaching recommendations. Built with modern technologies for scalable processing and real-time analysis.
 
-![System Architecture](https://via.placeholder.com/800x400.png?text=Resume+Analyzer+Architecture) *Example architecture diagram*
+
 
 ---
 
@@ -59,7 +59,7 @@ Frontend (React) → Backend (FastAPI) → AI Processing (Mistral) → Response
 
 ### Prerequisites
 - Python 3.9+
-- Node.js 16+
+- React.js
 - Mistral API key
 - PDF processing library dependencies (`poppler-utils`)
 
@@ -85,8 +85,6 @@ Frontend (React) → Backend (FastAPI) → AI Processing (Mistral) → Response
 4. Configure environment variables (create `.env` file):
    ```env
    MISTRAL_API_KEY=your_mistral_api_key
-   PDF_PROCESSING_TIMEOUT=20
-   AI_ANALYSIS_TIMEOUT=120
    ```
 
 5. Start FastAPI server:
@@ -106,17 +104,12 @@ Frontend (React) → Backend (FastAPI) → AI Processing (Mistral) → Response
    npm install
    ```
 
-3. Configure environment (create `.env` file):
-   ```env
-   VITE_API_URL=http://localhost:8000
-   ```
-
-4. Start development server:
+3. Start development server:
    ```bash
    npm run dev
    ```
 
-5. Production build:
+4. Production build:
    ```bash
    npm run build
    ```
