@@ -1,5 +1,3 @@
-Here's the complete GitHub README file, formatted for direct use:
-
 ```markdown
 # Resume Analyzer AI 🤖
 
