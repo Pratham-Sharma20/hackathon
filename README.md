@@ -1,4 +1,4 @@
-```markdown
+
 # Resume Analyzer AI 🤖
 
 [![Live Demo](https://img.shields.io/badge/Demo-Live%20Project-green?style=for-the-badge)](https://resume-analyze-ai.netlify.app)
