@@ -16,7 +16,6 @@ class EnhancedResumeAnalyzer:
         """Initialize the Enhanced Resume Analyzer with lightweight analysis capabilities."""
         self.client = Mistral(api_key=mistral_api_key)
 
-        # Expanded skill categories for more detailed analysis
         self.skill_categories = {
             'technical_skills': {
                 'programming': ['python', 'java', 'javascript', 'c++', 'ruby', 'go'],
@@ -41,7 +40,6 @@ class EnhancedResumeAnalyzer:
             }
         }
 
-        # Common section headers and their variations
         self.section_patterns = {
             'summary': ['summary', 'professional summary', 'profile', 'objective'],
             'experience': ['experience', 'work history', 'employment', 'work experience'],
@@ -365,18 +363,16 @@ class EnhancedResumeAnalyzer:
     async def analyze_resume(self, pdf_path: str) -> Dict[str, Any]:
         """Perform comprehensive resume analysis with detailed insights."""
         try:
-            # Read and process PDF
+         
             with open(pdf_path, 'rb') as pdf_file:
                 pdf_content = pdf_file.read()
 
-            # Extract and process content
             raw_text = self.extract_text_from_pdf(pdf_content)
             processed_content = self.process_resume_content(raw_text)
 
-            # Get AI analysis
+          
             analysis = await self.get_ai_analysis(processed_content)
 
-            # Combine results
             return {
                 "analysis": analysis["analysis"],
                 "extracted_content": processed_content,
@@ -392,20 +388,19 @@ class EnhancedResumeAnalyzer:
 async def main():
     """Main function with enhanced error handling and output formatting."""
     try:
-        mistral_api_key = "YOUR_MISTRAL_API_KEY"  # Replace with your actual API key
+        mistral_api_key = "YOUR_MISTRAL_API_KEY"  
         if not mistral_api_key:
             raise ValueError("MISTRAL_API_KEY environment variable not set")
 
         analyzer = EnhancedResumeAnalyzer(mistral_api_key)
-        pdf_path = "Resume.pdf"  # Replace with your PDF path
+        pdf_path = "Resume.pdf" 
 
         if not os.path.exists(pdf_path):
             raise FileNotFoundError(f"Resume file not found: {pdf_path}")
 
         print("\nAnalyzing resume... This may take a few moments.\n")
         results = await analyzer.analyze_resume(pdf_path)
-
-        # Print structured analysis results
+s
         print("\n=== Career Development Analysis ===\n")
         print(results["analysis"]["career_trajectory"])
 
@@ -418,7 +413,7 @@ async def main():
         print("\n=== Action Plan ===\n")
         print(results["analysis"]["action_plan"])
 
-        # Save results to file
+   
         output_file = f"resume_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=2)
