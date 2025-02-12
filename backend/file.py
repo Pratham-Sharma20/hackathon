@@ -400,7 +400,7 @@ async def main():
 
         print("\nAnalyzing resume... This may take a few moments.\n")
         results = await analyzer.analyze_resume(pdf_path)
-s
+
         print("\n=== Career Development Analysis ===\n")
         print(results["analysis"]["career_trajectory"])
 
