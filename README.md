@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # Resume Analyzer AI 🤖
 
@@ -192,3 +193,7 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 **Note:** Replace placeholder values (`yourusername`, `your_mistral_api_key`) with your actual credentials before deployment.
 ```
+=======
+# hackathon
+1st hackathon
+>>>>>>> 296c3e785d678aff2ee71d04219faf021110e5eb
