@@ -5,7 +5,7 @@ import { Brain } from 'lucide-react';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900 actual-container">
       <div className="container mx-auto px-4 py-8">
         <Header />
         
@@ -20,8 +20,7 @@ function App() {
             </h1>
             
             <p className="text-lg text-gray-300 mb-12">
-              Upload your resume to receive insights on your career trajectory, skills, and optimization suggestions.
-            </p>
+            "Upload your resume to get personalized insights on your career growth, skills,improvements.</p>  
             
             <FileUpload />
           </div>

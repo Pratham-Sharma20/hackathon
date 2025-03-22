@@ -1,12 +1,15 @@
 from fastapi import FastAPI, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Dict, Any  
+from typing import Dict, Any
+from dotenv import load_dotenv 
 import os
 import asyncio
 import traceback
 from datetime import datetime
 from file import EnhancedResumeAnalyzer
+
+load_dotenv()
 
 app = FastAPI(title="Resume Analyzer API", description="Analyze resumes and extract actionable insights.")
 

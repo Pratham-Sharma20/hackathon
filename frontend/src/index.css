@@ -3,10 +3,35 @@
 @tailwind utilities;
 
 @keyframes loading-bar {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .animate-loading-bar {
   animation: loading-bar 2s infinite;
+}
+
+/* Apply background to entire page */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Updated background settings */
+.actual-container {
+  background-image: url("/Background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Prevents zooming or scrolling */
+  min-height: 100vh; /* Ensures background covers full height */
+  width: 100%;
 }

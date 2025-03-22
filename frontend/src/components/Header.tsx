@@ -7,11 +7,11 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
-            <Sparkles className="w-6 h-6 text-purple-400" />
-            <span className="text-white font-semibold">ResumeAnalyzer</span>
+            <Sparkles className="w-6 h-6 text-purple-400" style={{fontSize:"30px"}} />
+            <span className="text-white font-semibold " style={{fontSize:"30px"}}>ResumeAnalyzer</span>
           </div>
           
-          <div className="text-gray-300">
+          {/* <div className="text-gray-300">
             Developed by{' '}
             <a 
               href="https://github.com/sumitjha16"
@@ -19,9 +19,9 @@ export function Header() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Sumit Jha
+              Team CAPF
             </a>
-          </div>
+          </div> */}
         </div>
       </div>
     </header>
