@@ -35,3 +35,31 @@ body,
   min-height: 100vh; /* Ensures background covers full height */
   width: 100%;
 }
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink {
+  0%, 100% { border-color: transparent }
+  50% { border-color: #8b5cf6 }
+}
+
+.typing-effect {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid #8b5cf6;
+  animation: 
+    typing 1.5s steps(40, end) forwards,
+    blink 0.75s step-end infinite;
+  width: 0;
+}
+
+/* Once typing finishes, remove cursor */
+.typing-effect.finished {
+  border-right: none;
+  animation: none;
+  width: 100%;
+}
+
