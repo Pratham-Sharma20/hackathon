@@ -1,7 +1,58 @@
 import React from 'react';
-import { ChevronDown, ChevronUp, CheckCircle, Briefcase, Code, ListChecks, Target } from 'lucide-react';
+import { ChevronDown, ChevronUp, CheckCircle, Briefcase, Code, ListChecks, Target, PieChart } from 'lucide-react';
 
-// Helper function to format action plan content with proper alignment
+// Add a new helper function for ATS score display
+const formatATSScore = (score) => {
+  if (score === undefined || score === null) return null;
+  
+  // Determine score color and message based on score value
+  const getScoreData = (score) => {
+    if (score >= 80) {
+      return {
+        color: 'text-green-400',
+        ringColor: 'border-green-500',
+        bgColor: 'bg-green-500/20',
+        message: 'Excellent! Your resume is highly optimized for ATS systems.'
+      };
+    } else if (score >= 60) {
+      return {
+        color: 'text-yellow-400',
+        ringColor: 'border-yellow-500',
+        bgColor: 'bg-yellow-500/20',
+        message: 'Good. Your resume has moderate ATS compatibility but could be improved.'
+      };
+    } else {
+      return {
+        color: 'text-red-400',
+        ringColor: 'border-red-500',
+        bgColor: 'bg-red-500/20',
+        message: 'Your resume needs optimization to pass through ATS filters effectively.'
+      };
+    }
+  };
+  
+  const { color, ringColor, bgColor, message } = getScoreData(score);
+  
+  return (
+    <div className="flex flex-col md:flex-row items-center gap-6">
+      <div className="flex-shrink-0">
+        <div className={`w-32 h-32 rounded-full ${ringColor} border-4 flex items-center justify-center ${bgColor} p-1`}>
+          <div className={`text-3xl font-bold ${color}`}>{Math.round(score)}%</div>
+        </div>
+      </div>
+      
+      <div className="flex-1">
+        <h3 className="text-lg font-medium text-purple-200 mb-3 text-left">What this means:</h3>
+        <p className="text-gray-300 mb-2 text-left">{message}</p>
+        <p className="text-gray-400 text-sm text-left">
+          This score reflects how well your resume matches industry-standard keywords and formatting requirements.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+// Keep all existing helper functions as is
 const formatActionPlan = (content) => {
   if (!content) return null;
   
@@ -50,7 +101,6 @@ const formatActionPlan = (content) => {
   });
 };
 
-// Helper function to format enhancement suggestions with proper alignment
 const formatEnhancementSuggestions = (content) => {
   if (!content) return null;
 
@@ -88,7 +138,6 @@ const formatEnhancementSuggestions = (content) => {
   });
 };
 
-// Helper function to format skills analysis with proper alignment
 const formatSkillsAnalysis = (content) => {
   if (!content) return null;
 
@@ -112,7 +161,9 @@ const formatSkillsAnalysis = (content) => {
 
 export function ResultsDisplay({ analysis, onClose }) {
   // Use an object to track expanded state for each section independently
-  const [expandedSections, setExpandedSections] = React.useState({});
+  const [expandedSections, setExpandedSections] = React.useState({
+    ats: true // Start with ATS section expanded by default
+  });
 
   const toggleSection = (sectionId) => {
     setExpandedSections(prev => ({
@@ -121,7 +172,15 @@ export function ResultsDisplay({ analysis, onClose }) {
     }));
   };
 
+  // Add ATS score to the sections array
   const sections = [
+    {
+      id: 'ats',
+      title: 'ATS Compatibility Score',
+      icon: <PieChart className="w-6 h-6" />,
+      content: analysis?.ats_score,
+      formatter: formatATSScore
+    },
     {
       id: 'career',
       title: 'Career Trajectory',

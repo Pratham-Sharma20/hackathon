@@ -1,18 +1,5 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 # Resume Analyzer AI 🤖
-
-[![Live Demo](https://img.shields.io/badge/Demo-Live%20Project-green?style=for-the-badge)](https://resume-analyze-ai.netlify.app)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-
-An intelligent resume analysis platform that combines AI-powered insights with comprehensive career coaching recommendations. Built with modern technologies for scalable processing and real-time analysis.
-(Note: It might take some time to displaya analysis as a result of usage of open source LLM models)
-
-
----
-
-## Key Features ✨
 
 ### Advanced Resume Parsing
 - 📄 PDF text extraction with formatting preservation
@@ -47,13 +34,7 @@ An intelligent resume analysis platform that combines AI-powered insights with c
 
 ---
 
-## System Architecture 🏗️
 
-```
-Frontend (React) → Backend (FastAPI) → AI Processing (Mistral) → Response
-       ↑                   ↑                       ↑
-    User Upload       PDF Parsing/Processing    AI Analysis
-```
 
 ---
 
