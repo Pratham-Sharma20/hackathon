@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Upload, AlertCircle, Loader } from 'lucide-react';
-import { analyzeResume, healthCheck } from '../utils/api';
+// import { analyzeResume, healthCheck } from '../utils/api';
 import { LoadingScreen } from './LoadingScreen';
 import { ResultsDisplay } from './ResultsDisplay';
 import type { ResumeAnalysis } from '../types/api';
