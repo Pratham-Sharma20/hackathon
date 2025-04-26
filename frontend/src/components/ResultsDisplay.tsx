@@ -5,6 +5,10 @@ import { ChevronDown, ChevronUp, CheckCircle, Briefcase, Code, ListChecks, Targe
 const formatATSScore = (score) => {
   if (score === undefined || score === null) return null;
   
+  // MODIFICATION: Override the score for testing purposes
+  // Set a fixed score value for demonstration instead of using the backend value
+  const displayScore = 78; // Change this value to whatever you want to test
+  
   // Determine score color and message based on score value
   const getScoreData = (score) => {
     if (score >= 80) {
@@ -31,13 +35,13 @@ const formatATSScore = (score) => {
     }
   };
   
-  const { color, ringColor, bgColor, message } = getScoreData(score);
+  const { color, ringColor, bgColor, message } = getScoreData(displayScore);
   
   return (
     <div className="flex flex-col md:flex-row items-center gap-6">
       <div className="flex-shrink-0">
         <div className={`w-32 h-32 rounded-full ${ringColor} border-4 flex items-center justify-center ${bgColor} p-1`}>
-          <div className={`text-3xl font-bold ${color}`}>{Math.round(score)}%</div>
+          <div className={`text-3xl font-bold ${color}`}>{Math.round(displayScore)}%</div>
         </div>
       </div>
       

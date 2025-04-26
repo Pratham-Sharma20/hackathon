@@ -8,7 +8,9 @@ import json
 from collections import defaultdict
 import asyncio
 import traceback
+import random  # Added for random score generation
 from typing import Dict, List, Tuple, Optional, Any 
+
 class EnhancedResumeAnalyzer:
     def __init__(self, mistral_api_key: str):
         """Initialize the Enhanced Resume Analyzer with lightweight analysis capabilities."""
@@ -103,6 +105,7 @@ class EnhancedResumeAnalyzer:
         except Exception as e:
             print(f"Error extracting PDF content: {e}")
             raise
+    
     def identify_section(self, text: str) -> str:
         """Identify resume section based on pattern matching."""
         text_lower = text.lower()
@@ -110,9 +113,11 @@ class EnhancedResumeAnalyzer:
             if any(pattern in text_lower for pattern in patterns):
                 return section
         return None
+    
     def count_sentences(self, text: str) -> int:
         """Simple sentence counter using regular expressions."""
         return len(re.split(r'[.!?]+', text))
+    
     def extract_dates(self, text: str) -> List[str]:
         """Extract dates from text."""
         date_patterns = [
@@ -126,6 +131,7 @@ class EnhancedResumeAnalyzer:
         for pattern in date_patterns:
             dates.extend(re.findall(pattern, text, re.IGNORECASE))
         return sorted(list(set(dates)))
+    
     def extract_metrics(self, text: str) -> List[str]:
         """Extract metrics and achievements with numbers."""
         metric_patterns = [
@@ -138,6 +144,7 @@ class EnhancedResumeAnalyzer:
         for pattern in metric_patterns:
             metrics.extend(re.findall(pattern, text, re.IGNORECASE))
         return sorted(list(set(metrics)))
+    
     def categorize_skills(self, text: str) -> dict:
         """Categorize skills using regex pattern matching."""
         text_lower = text.lower()
@@ -156,6 +163,7 @@ class EnhancedResumeAnalyzer:
             }
             for category, subcategories in found_skills.items()
         }
+    
     def process_resume_content(self, text: str) -> dict:
         """Process resume content with lightweight section detection and analysis."""
         sections = defaultdict(list)
@@ -191,6 +199,7 @@ class EnhancedResumeAnalyzer:
             }
         }
         return processed_content
+    
     async def get_ai_analysis(self, resume_content: Dict[str, Any]) -> Dict[str, Any]:
         """Generate comprehensive AI analysis with improved prompts for deeper insights"""
         try:
@@ -345,116 +354,13 @@ class EnhancedResumeAnalyzer:
     
     def calculate_ats_score(self, resume_content: Dict[str, Any]) -> float:
         """
-        Calculate an ATS score using the same algorithm that commercial ATS systems use:
-        1. Keyword matching and density
-        2. Resume structure and formatting
-        3. Experience and education matching
-        4. Quantifiable achievements
+        Generate a random ATS score between 65 and 76.
         """
-        try:
-            if not resume_content or not isinstance(resume_content, dict):
-                raise ValueError("Invalid resume content provided for ATS scoring.")
-            
-            raw_text = resume_content.get('raw_text', '').lower()
-            
-            # FACTOR 1: KEYWORD MATCHING (50% of score)
-            # This is the most important factor in real ATS systems
-            keyword_score = 0
-            matched_keywords = 0
-            
-            # Count how many industry keywords are found in the resume
-            for keyword in self.industry_keywords:
-                # Use word boundary to ensure we're matching complete words
-                if re.search(r'\b' + re.escape(keyword) + r'\b', raw_text):
-                    matched_keywords += 1
-            
-            # Calculate keyword density score (most important factor in real ATS)
-            # Typical resume has ~500 words, we want 5-8% keyword density
-            word_count = len(raw_text.split())
-            if word_count > 0:
-                keyword_density = (matched_keywords * 100) / word_count
-                # Optimal keyword density is 5-8%
-                if keyword_density >= 5 and keyword_density <= 8:
-                    keyword_score = 50  # Perfect keyword density
-                elif keyword_density > 0 and keyword_density < 5:
-                    keyword_score = 30 + (keyword_density * 4)  # Scales up to 50
-                elif keyword_density > 8:
-                    keyword_score = 50 - ((keyword_density - 8) * 3)  # Penalty for keyword stuffing
-                    keyword_score = max(30, keyword_score)  # Don't go below 30
-            
-            # FACTOR 2: RESUME STRUCTURE (25% of score)
-            # ATS systems need proper sections to correctly parse resume
-            structure_score = 0
-            essential_sections = ['experience', 'education', 'skills']
-            important_sections = ['summary', 'projects', 'certifications']
-            
-            # Check for essential sections (15%)
-            for section in essential_sections:
-                if section in resume_content.get('sections', {}):
-                    structure_score += 5
-            
-            # Check for important sections (10%)
-            for section in important_sections:
-                if section in resume_content.get('sections', {}):
-                    structure_score += 3
-            
-            # Cap at 25
-            structure_score = min(structure_score, 25)
-            
-            # FACTOR 3: EXPERIENCE & EDUCATION QUALITY (15% of score)
-            # Real ATS systems value detailed experience descriptions
-            quality_score = 0
-            
-            # Check for quantifiable metrics (up to 10%)
-            metrics = resume_content.get('metrics', [])
-            if len(metrics) >= 5:
-                quality_score += 10
-            elif len(metrics) > 0:
-                quality_score += len(metrics) * 2
-            
-            # Check for detailed dates (up to 5%)
-            dates = resume_content.get('dates', [])
-            if len(dates) >= 5:
-                quality_score += 5
-            elif len(dates) > 0:
-                quality_score += min(len(dates), 5)
-            
-            # FACTOR 4: FORMATTING & READABILITY (10% of score)
-            # ATS systems prefer clean, parsable formatting
-            format_score = 0
-            
-            # Check resume length - between 400-1000 words is optimal for ATS
-            if 400 <= word_count <= 1000:
-                format_score += 5
-            elif word_count > 300:
-                format_score += 3
-            
-            # Check for clean formatting - look for section headings and bullet points
-            if resume_content.get('sections') and len(resume_content.get('sections', {})) >= 3:
-                format_score += 2
-            
-            # Check for bullet points (marked by • or - at start of lines)
-            bullet_pattern = r'^\s*[•\-]\s'
-            bullets = re.findall(bullet_pattern, raw_text, re.MULTILINE)
-            if len(bullets) >= 5:
-                format_score += 3
-            elif len(bullets) > 0:
-                format_score += 1
-            
-            # Calculate final score (100 point scale)
-            final_score = keyword_score + structure_score + quality_score + format_score
-            
-            # Ensure score is between 0-100
-            final_score = max(min(final_score, 100), 0)
-            
-            # Round to nearest tenth
-            return round(final_score, 1)
-            
-        except Exception as e:
-            print(f"Error calculating ATS score: {e}")
-            # Real ATS systems assume a neutral score if processing fails
-            return 75.0
-            
+        # Generate random float between 65.0 and 76.0
+        random_score = random.uniform(65.0, 76.0)
+        # Round to nearest tenth
+        return round(random_score, 1)
+    
     async def analyze_resume(self, pdf_path: str) -> Dict[str, Any]:
         """Perform comprehensive resume analysis with detailed insights."""
         try:
@@ -474,6 +380,7 @@ class EnhancedResumeAnalyzer:
         except Exception as e:
             print(f"Error in resume analysis: {e}")
             raise
+
 async def main():
     """Main function with enhanced error handling and output formatting."""
     try:
@@ -502,5 +409,6 @@ async def main():
     except Exception as e:
         print(f"Error: {e}")
         raise
+
 if __name__ == "__main__":
     asyncio.run(main())
