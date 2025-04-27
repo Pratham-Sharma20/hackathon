@@ -1,36 +1,49 @@
 import React from 'react';
 import { ChevronDown, ChevronUp, CheckCircle, Briefcase, Code, ListChecks, Target, PieChart } from 'lucide-react';
 
-// Add a new helper function for ATS score display
+// Updated helper function for ATS score display with more nuanced score ranges
 const formatATSScore = (score) => {
   if (score === undefined || score === null) return null;
   
-  // MODIFICATION: Override the score for testing purposes
-  // Set a fixed score value for demonstration instead of using the backend value
-  const displayScore = 78; // Change this value to whatever you want to test
+  // Use the actual score from the API
+  const displayScore = score.score || score;
   
-  // Determine score color and message based on score value
+  // Determine score color and message based on updated score ranges
   const getScoreData = (score) => {
-    if (score >= 80) {
+    if (score >= 85) {
       return {
         color: 'text-green-400',
         ringColor: 'border-green-500',
         bgColor: 'bg-green-500/20',
         message: 'Excellent! Your resume is highly optimized for ATS systems.'
       };
-    } else if (score >= 60) {
+    } else if (score >= 70) {
+      return {
+        color: 'text-green-300',
+        ringColor: 'border-green-400',
+        bgColor: 'bg-green-400/20',
+        message: 'Very good. Your resume is well-optimized for ATS systems with minor improvements possible.'
+      };
+    } else if (score >= 55) {
       return {
         color: 'text-yellow-400',
         ringColor: 'border-yellow-500',
         bgColor: 'bg-yellow-500/20',
-        message: 'Good. Your resume has moderate ATS compatibility but could be improved.'
+        message: 'Good. Your resume has moderate ATS compatibility but could use targeted improvements.'
+      };
+    } else if (score >= 40) {
+      return {
+        color: 'text-orange-400',
+        ringColor: 'border-orange-500',
+        bgColor: 'bg-orange-500/20',
+        message: 'Fair. Your resume needs several improvements to pass through ATS filters effectively.'
       };
     } else {
       return {
         color: 'text-red-400',
         ringColor: 'border-red-500',
         bgColor: 'bg-red-500/20',
-        message: 'Your resume needs optimization to pass through ATS filters effectively.'
+        message: 'Needs work. Your resume requires significant optimization to be compatible with ATS systems.'
       };
     }
   };
@@ -49,8 +62,22 @@ const formatATSScore = (score) => {
         <h3 className="text-lg font-medium text-purple-200 mb-3 text-left">What this means:</h3>
         <p className="text-gray-300 mb-2 text-left">{message}</p>
         <p className="text-gray-400 text-sm text-left">
-          This score reflects how well your resume matches industry-standard keywords and formatting requirements.
+          This score reflects how well your resume matches industry-standard keywords, formatting requirements, 
+          and ATS-friendly structure.
         </p>
+        {score.breakdown && (
+          <div className="mt-4">
+            <h4 className="text-md font-medium text-purple-200 mb-2 text-left">Score Breakdown:</h4>
+            <ul className="text-gray-300 text-sm text-left">
+              {Object.entries(score.breakdown).map(([key, value]) => (
+                <li key={key} className="mb-1 flex items-start">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full mt-1.5 mr-2"></div>
+                  <span><span className="text-purple-300">{key.replace(/_/g, ' ')}:</span> {value}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -176,7 +203,7 @@ export function ResultsDisplay({ analysis, onClose }) {
     }));
   };
 
-  // Add ATS score to the sections array
+  // Enhanced section data with more descriptive tooltips
   const sections = [
     {
       id: 'ats',
