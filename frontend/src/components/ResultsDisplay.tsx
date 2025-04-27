@@ -1,15 +1,11 @@
 import React from 'react';
-import { ChevronDown, ChevronUp, CheckCircle, Briefcase, Code, ListChecks, Target, PieChart } from 'lucide-react';
+import { CheckCircle, Briefcase, Code, ListChecks, Target, PieChart, ChevronDown, ChevronUp } from 'lucide-react';
 
-// Add a new helper function for ATS score display
 const formatATSScore = (score) => {
   if (score === undefined || score === null) return null;
-  
-  // MODIFICATION: Override the score for testing purposes
-  // Set a fixed score value for demonstration instead of using the backend value
-  const displayScore = 78; // Change this value to whatever you want to test
-  
-  // Determine score color and message based on score value
+
+  const displayScore = 78; // testing value
+
   const getScoreData = (score) => {
     if (score >= 80) {
       return {
@@ -34,34 +30,32 @@ const formatATSScore = (score) => {
       };
     }
   };
-  
+
   const { color, ringColor, bgColor, message } = getScoreData(displayScore);
-  
+
   return (
-    <div className="flex flex-col md:flex-row items-center gap-6">
+    <div className="flex flex-col md:flex-row items-center gap-6 p-6 rounded-xl border border-purple-500/30 bg-black/30 shadow-md">
       <div className="flex-shrink-0">
-        <div className={`w-32 h-32 rounded-full ${ringColor} border-4 flex items-center justify-center ${bgColor} p-1`}>
+        <div className={`w-32 h-32 rounded-full ${ringColor} border-4 flex items-center justify-center ${bgColor}`}>
           <div className={`text-3xl font-bold ${color}`}>{Math.round(displayScore)}%</div>
         </div>
       </div>
-      
       <div className="flex-1">
-        <h3 className="text-lg font-medium text-purple-200 mb-3 text-left">What this means:</h3>
-        <p className="text-gray-300 mb-2 text-left">{message}</p>
-        <p className="text-gray-400 text-sm text-left">
-          This score reflects how well your resume matches industry-standard keywords and formatting requirements.
+        <h3 className="text-xl font-semibold text-purple-200 mb-2">ATS Compatibility</h3>
+        <p className="text-gray-300 mb-2">{message}</p>
+        <p className="text-gray-400 text-sm">
+          This score reflects how well your resume matches industry-standard keywords and formatting.
         </p>
       </div>
     </div>
   );
 };
 
-// Keep all existing helper functions as is
 const formatActionPlan = (content) => {
   if (!content) return null;
-  
+
   const sections = content.split(/(?=\d+\.\s)/).filter(Boolean);
-  
+
   return sections.map((section, idx) => {
     const [title, ...content] = section.split('\n').filter(Boolean);
     const items = content.reduce((acc, line) => {
@@ -77,28 +71,20 @@ const formatActionPlan = (content) => {
 
     return (
       <div key={idx} className="mb-6">
-        <h3 className="text-lg font-medium text-purple-200 mb-3 text-left">{title}</h3>
+        <h3 className="text-xl font-semibold text-purple-200 mb-3">{title}</h3>
         {items.map((item, i) => {
           if (item.type === 'heading') {
-            return (
-              <h4 key={i} className="text-base font-medium text-purple-300 mt-4 mb-2 text-left">
-                {item.content}
-              </h4>
-            );
+            return <h4 key={i} className="text-lg font-semibold text-purple-300 mt-4 mb-2">{item.content}</h4>;
           }
           if (item.type === 'bullet') {
             return (
               <div key={i} className="flex items-start gap-2 mb-2">
-                <CheckCircle className="w-4 h-4 text-purple-400 mt-1 flex-shrink-0" />
-                <p className="text-gray-300 text-left">{item.content}</p>
+                <CheckCircle className="w-4 h-4 text-purple-400 mt-1" />
+                <p className="text-gray-300">{item.content}</p>
               </div>
             );
           }
-          return (
-            <p key={i} className="text-gray-300 mb-2 text-left">
-              {item.content}
-            </p>
-          );
+          return <p key={i} className="text-gray-300 mb-2">{item.content}</p>;
         })}
       </div>
     );
@@ -112,30 +98,26 @@ const formatEnhancementSuggestions = (content) => {
 
   return sections.map((section, idx) => {
     const [title, ...content] = section.split('\n').filter(Boolean);
-    
+
     return (
       <div key={idx} className="mb-6">
-        <h3 className="text-lg font-medium text-purple-200 mb-3 text-left">{title}</h3>
+        <h3 className="text-xl font-semibold text-purple-200 mb-3">{title}</h3>
         {content.map((line, i) => {
           if (line.startsWith('Example:')) {
             return (
               <div key={i} className="bg-purple-900/30 p-4 rounded-lg my-3">
-                <p className="text-gray-300 italic text-left">{line.replace('Example:', '').trim()}</p>
+                <p className="text-gray-300 italic">{line.replace('Example:', '').trim()}</p>
               </div>
             );
           }
           if (line.match(/^[a-z]\)/)) {
             return (
               <div key={i} className="mb-3">
-                <p className="text-gray-300 text-left">{line}</p>
+                <p className="text-gray-300">{line}</p>
               </div>
             );
           }
-          return (
-            <p key={i} className="text-gray-300 mb-2 text-left">
-              {line}
-            </p>
-          );
+          return <p key={i} className="text-gray-300 mb-2">{line}</p>;
         })}
       </div>
     );
@@ -149,14 +131,12 @@ const formatSkillsAnalysis = (content) => {
 
   return sections.map((section, idx) => {
     const [title, ...content] = section.split('\n').filter(Boolean);
-    
+
     return (
       <div key={idx} className="mb-6">
-        <h3 className="text-lg font-medium text-purple-200 mb-3 text-left">{title}</h3>
+        <h3 className="text-xl font-semibold text-purple-200 mb-3">{title}</h3>
         {content.map((line, i) => (
-          <p key={i} className="text-gray-300 mb-2 text-left">
-            {line}
-          </p>
+          <p key={i} className="text-gray-300 mb-2">{line}</p>
         ))}
       </div>
     );
@@ -164,9 +144,12 @@ const formatSkillsAnalysis = (content) => {
 };
 
 export function ResultsDisplay({ analysis, onClose }) {
-  // Use an object to track expanded state for each section independently
   const [expandedSections, setExpandedSections] = React.useState({
-    ats: true // Start with ATS section expanded by default
+    ats: true,
+    career: false,
+    skills: false,
+    optimization: false,
+    action: false,
   });
 
   const toggleSection = (sectionId) => {
@@ -176,7 +159,6 @@ export function ResultsDisplay({ analysis, onClose }) {
     }));
   };
 
-  // Add ATS score to the sections array
   const sections = [
     {
       id: 'ats',
@@ -217,8 +199,8 @@ export function ResultsDisplay({ analysis, onClose }) {
 
   if (!analysis?.analysis?.analysis) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-900/90 to-gray-900/90 backdrop-blur-sm flex items-center justify-center p-4">
-        <div className="animate-pulse text-2xl text-white font-medium">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0f0c29] via-[#302b63] to-[#24243e] p-4">
+        <div className="animate-pulse text-2xl text-white font-semibold">
           Analyzing your resume...
         </div>
       </div>
@@ -226,43 +208,39 @@ export function ResultsDisplay({ analysis, onClose }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-900/90 to-gray-900/90 backdrop-blur-sm py-10 px-4 md:px-6">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-bold text-white text-center mb-2">
-          Resume Analysis Results
-        </h1>
-        <p className="text-gray-300 text-center mb-8">
-          Detailed insights and recommendations for your professional journey
-        </p>
+    <div className="min-h-screen py-12 px-4 md:px-8 bg-gradient-to-b from-[#0f0c29] via-[#302b63] to-[#24243e]">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Resume Analysis Results</h1>
+          <p className="text-gray-400 text-lg">Personalized insights and growth roadmap crafted for you</p>
+        </div>
 
-        <div className="space-y-4">
+        <div className="grid gap-8">
           {sections.map((section) => (
             <div 
-              key={section.id} 
-              className="rounded-lg border border-purple-500/20 bg-black/40 overflow-hidden transition-all duration-300"
+              key={section.id}
+              className="group rounded-2xl bg-white/5 backdrop-blur-md border border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300"
             >
               <button
                 onClick={() => toggleSection(section.id)}
-                className="w-full p-4 md:p-6 flex items-center justify-between text-white hover:bg-purple-500/10 transition-all"
+                className="w-full flex items-center justify-between p-6 md:p-8 cursor-pointer focus:outline-none"
+                aria-expanded={expandedSections[section.id]}
+                aria-controls={`${section.id}-content`}
               >
-                <div className="flex items-center gap-3 md:gap-4">
-                  <div className="p-2 rounded-lg bg-purple-500/20">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-purple-500/20 rounded-xl">
                     {section.icon}
                   </div>
-                  <span className="text-lg md:text-xl font-medium">{section.title}</span>
+                  <h2 className="text-2xl font-semibold text-purple-300">{section.title}</h2>
                 </div>
-                {expandedSections[section.id] ? (
-                  <ChevronUp className="w-6 h-6 text-purple-400" />
-                ) : (
-                  <ChevronDown className="w-6 h-6 text-purple-400" />
-                )}
+                <div className="text-purple-400">
+                  {expandedSections[section.id] ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
+                </div>
               </button>
-              
+
               {expandedSections[section.id] && (
-                <div className="px-4 md:px-6 pb-6">
-                  <div className="pt-6 border-t border-purple-500/20">
-                    {section.formatter(section.content)}
-                  </div>
+                <div id={`${section.id}-content`} className="p-6 md:p-8 space-y-4 border-t border-purple-500/30">
+                  {section.formatter(section.content)}
                 </div>
               )}
             </div>
@@ -271,7 +249,7 @@ export function ResultsDisplay({ analysis, onClose }) {
 
         <button
           onClick={onClose}
-          className="mt-8 w-full py-4 rounded-lg bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white font-medium text-lg transition-all duration-300 shadow-lg hover:shadow-purple-500/25"
+          className="mt-12 w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-500 hover:from-purple-500 hover:to-indigo-400 text-white font-semibold text-lg transition-all duration-300 shadow-md hover:shadow-indigo-500/30"
         >
           Analyze Another Resume
         </button>
