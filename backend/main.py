@@ -40,7 +40,6 @@ try:
 except Exception as e:
     print(f"Error initializing EnhancedResumeAnalyzer: {str(e)}")
     raise
-
 @app.post("/analyze")
 async def analyze_resume(file: UploadFile) -> Dict[str, Any]:
     """Endpoint to analyze a resume PDF and return AI analysis, extracted content, ATS score, and metadata."""
@@ -69,12 +68,20 @@ async def analyze_resume(file: UploadFile) -> Dict[str, Any]:
         # Step 2: Process extracted content
         processed_content = analyzer.process_resume_content(raw_text)
 
-        # Step 3: Get ATS Score
+        # Step 3: Get ATS Score - Use the new method that returns a dictionary
         try:
              ats_score = analyzer.calculate_ats_score(processed_content)
         except Exception as e:
             print(f"ATS score calculation error: {str(e)}\n{traceback.format_exc()}")
-            ats_score = None  # fallback if ATS score fails
+            ats_score = {
+                "score": 65,
+                "rating": "Average (Error in calculation)",
+                "pass_threshold": False,
+                "breakdown": {
+                    "error": f"Score calculation error: {str(e)}",
+                    "improvement_areas": "Unable to analyze resume properly. Ensure PDF is correctly formatted."
+                }
+            }
 
         # Step 4: Get AI Analysis
         try: 
@@ -94,31 +101,15 @@ async def analyze_resume(file: UploadFile) -> Dict[str, Any]:
         # Calculate processing time
         processing_duration = (datetime.now() - start_time).total_seconds()
 
-        # Real-world ATS score display with detailed breakdowns
-        ats_display = {
-            "score": ats_score,
-            "rating": "Excellent" if ats_score >= 85 else 
-                     "Very Good" if ats_score >= 75 else 
-                     "Good" if ats_score >= 65 else 
-                     "Average" if ats_score >= 50 else "Needs Improvement",
-            "pass_threshold": ats_score >= 75,  # Most ATS systems use 75% as passing threshold
-            "breakdown": {
-                "keyword_match": "Strong keyword alignment with job requirements",
-                "resume_structure": "Professional formatting optimized for ATS parsing",
-                "experience_detail": "Quantifiable achievements clearly presented",
-                "improvement_areas": "Consider adding more industry-specific terminology" if ats_score < 85 else "Resume is well-optimized for ATS systems"
-            }
-        }
-
-        # Step 5: Return everything
+        # Step 5: Return everything with the enhanced ATS score object
         return JSONResponse(content={
             "analysis": analysis,
             "extracted_content": processed_content,
-            "ats_score": ats_display,
+            "ats_score": ats_score,
             "metadata": {
                 "timestamp": datetime.now().isoformat(),
                 "processing_time_seconds": processing_duration,
-                "version": "2.0.0"
+                "version": "2.1.0"  # Incrementing version to reflect ATS score enhancement
             }
         })
 
